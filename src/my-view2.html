@@ -10,6 +10,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="shared-styles.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+
 
 <dom-module id="my-view2">
   <template>
@@ -22,16 +25,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <div class="card">
-      <div class="circle">2</div>
-      <h1>View Two</h1>
-      <p>Ea duis bonorum nec, falli paulo aliquid ei eum.</p>
-      <p>Id nam odio natum malorum, tibique copiosae expetenda mel ea.Detracto suavitate repudiandae no eum. Id adhuc minim soluta nam.Id nam odio natum malorum, tibique copiosae expetenda mel ea.</p>
+      <div class="circle">[[date]]</div>
+      <paper-textarea id="schedule" label="スケジュール"></paper-textarea>
+      <paper-button on-click="sendSchedule">送信</paper-button>
     </div>
   </template>
 
   <script>
     class MyView2 extends Polymer.Element {
       static get is() { return 'my-view2'; }
+
+      static get properties() {
+        return {
+          date:String
+        };
+      }
+      sendSchedule(){
+        var schedule = this.$.schedule.value
+        window.firebase.database().ref().push(schedule)
+        this.$.schedule.value = null
+      }
     }
 
     window.customElements.define(MyView2.is, MyView2);

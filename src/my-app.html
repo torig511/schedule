@@ -107,7 +107,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             fallback-selection="view404"
             role="main">
           <my-view1 name="view1"></my-view1>
-          <my-view2 name="view2"></my-view2>
+          <my-view2 name="view2" date="[[parameter]]"></my-view2>
           <my-view3 name="view3"></my-view3>
           <my-view404 name="view404"></my-view404>
         </iron-pages>
@@ -135,16 +135,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           // This shouldn't be neccessary, but the Analyzer isn't picking up
           // Polymer.Element#rootPath
           rootPath: String,
+          parameter: String,
         };
       }
+
 
       static get observers() {
         return [
           '_routePageChanged(routeData.page)',
+          'setParameter(subroute.path)',
         ];
       }
 
+      setParameter(){
+        var parameter = this.subroute.path
+        if(!parameter){
+          this.set("parameter", "")
+          return
+        }
+        parameter = parameter.substring(1)
+        this.set("parameter", parameter)
+      }
+      
       _routePageChanged(page) {
+        console.log("routeData", this.routeData)
+        console.log("subroute", this.subroute)
+
+
         // If no page was found in the route data, page will be an empty string.
         // Default to 'view1' in that case.
         this.page = page || 'view1';
